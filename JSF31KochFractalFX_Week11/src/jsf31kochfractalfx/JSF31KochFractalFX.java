@@ -215,7 +215,7 @@ public class JSF31KochFractalFX extends Application {
         gc.fillRect(0.0,0.0,kpWidth,kpHeight);
     }
     
-    public void drawEdge(Edge e) {
+    public void drawEdge(Edge e, Boolean white) {
         // Graphics
         GraphicsContext gc = kochPanel.getGraphicsContext2D();
         
@@ -223,8 +223,12 @@ public class JSF31KochFractalFX extends Application {
         Edge e1 = edgeAfterZoomAndDrag(e);
         
         // Set line color
-        gc.setStroke(e1.color);
-        
+        if(white){
+            gc.setStroke(Color.WHITE);
+        }
+        else{
+            gc.setStroke(e1.color);
+        }
         // Set line width depending on level
         if (currentLevel <= 3) {
             gc.setLineWidth(2.0);

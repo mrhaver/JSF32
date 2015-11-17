@@ -66,7 +66,7 @@ public class KochManager{
         TimeStamp tst = new TimeStamp();
         tst.setBegin("Begin Tekenen");
         for(Edge e : edges){
-            application.drawEdge(e);
+            application.drawEdge(e, false);
         }
         tst.setEnd("Fractal Getekend");
         application.setTextDraw(tst.toString());
