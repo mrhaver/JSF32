@@ -33,9 +33,9 @@ public class KochManager{
     }
     
     synchronized public void changeLevel(int nxt) {
-        //application.getProgressbarRight().unbind();
-        //application.getProgressbarLeft().unbind();
-        //application.getProgressbarBottom().unbind();
+        //application.getProgressBarRight().unbind();
+        //application.getProgressBarLeft().unbind();
+        //application.getProgressBarBottom().unbind();
         koch.setLevel(nxt);
         edges.clear();
         TimeStamp tsb = new TimeStamp();
@@ -46,9 +46,9 @@ public class KochManager{
         Thread tRight = new Thread(taskRight);
         Thread tLeft = new Thread(taskLeft);
         Thread tBottom = new Thread(taskBottom);
-        //application.getProgressBarRight().progressProtperty().bind(taskRight.progressProperty());
-        //application.getProgressBarLeft().progressProtperty().bind(taskLeft.progressProperty());
-        //application.getProgressBarBottom().progressProtperty().bind(taskBottom.progressProperty());
+        //application.getProgressBarRight().progressProperty().bind(taskRight.progressProperty());
+        //application.getProgressBarLeft().progressProperty().bind(taskLeft.progressProperty());
+        //application.getProgressBarBottom().progressProperty().bind(taskBottom.progressProperty());
         tLeft.start();
         tRight.start();
         tBottom.start();
