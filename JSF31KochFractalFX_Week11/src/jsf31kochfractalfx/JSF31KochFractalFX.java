@@ -340,7 +340,19 @@ public class JSF31KochFractalFX extends Application {
     }
     
     public ProgressBar getProgressBarLeft(){
-        return progressBarBottom;
+        return progressBarLeft;
+    }
+    
+    public Label getlabelCountLeft(){
+        return labelCountLeft;
+    }
+    
+    public Label getlabelCountBottom(){
+        return labelCountBottom;
+    }
+        
+    public Label getlabelCountRight(){
+        return labelCountRight;
     }
 
     /**

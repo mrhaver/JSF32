@@ -5,6 +5,7 @@
  */
 package calculate;
 
+import static java.lang.Thread.sleep;
 import java.util.Observable;
 import java.util.Observer;
 import javafx.concurrent.Task;
@@ -20,6 +21,7 @@ public class GenerateLeft extends Task<Void> implements Observer{
     final private KochFractal koch;
     final private JSF31KochFractalFX application;
     private double edges = 0;
+    private Object LOG;
     
     public GenerateLeft(KochManager km, JSF31KochFractalFX application, int level){
         koch = new KochFractal();
@@ -33,7 +35,13 @@ public class GenerateLeft extends Task<Void> implements Observer{
     public void update(Observable o, Object arg) {
         edges++;
         km.voegEdgeToe((Edge)arg);
-        updateProgress(edges,koch.getNrOfEdges());
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+
+        }
+        updateProgress(edges,koch.getNrOfEdges() / 3);
+        updateMessage("Nr edges: " + String.valueOf(edges));
     }
 
     @Override

@@ -33,7 +33,14 @@ public class GenerateBottom extends Task<Void> implements Observer {
     public void update(Observable o, Object arg) {
         edges++;
         km.voegEdgeToe((Edge)arg);
-        updateProgress(edges,koch.getNrOfEdges());
+        try {
+            Thread.sleep(1);
+        } catch (InterruptedException e) {
+
+        }
+        System.out.println("Bottom: " + edges + " " + koch.getNrOfEdges() / 3);
+        updateProgress(edges,koch.getNrOfEdges() / 3);
+        updateMessage("Nr edges: " + String.valueOf(edges));
     }
 
     @Override

@@ -33,9 +33,8 @@ public class KochManager{
     }
     
     synchronized public void changeLevel(int nxt) {
-        //application.getProgressBarRight().unbind();
-        //application.getProgressBarLeft().unbind();
-        //application.getProgressBarBottom().unbind();
+        unbindObjects();
+        resetObjects();
         koch.setLevel(nxt);
         edges.clear();
         TimeStamp tsb = new TimeStamp();
@@ -46,9 +45,13 @@ public class KochManager{
         Thread tRight = new Thread(taskRight);
         Thread tLeft = new Thread(taskLeft);
         Thread tBottom = new Thread(taskBottom);
-        //application.getProgressBarRight().progressProperty().bind(taskRight.progressProperty());
-        //application.getProgressBarLeft().progressProperty().bind(taskLeft.progressProperty());
-        //application.getProgressBarBottom().progressProperty().bind(taskBottom.progressProperty());
+        application.getProgressBarRight().progressProperty().bind(taskRight.progressProperty());
+        application.getProgressBarLeft().progressProperty().bind(taskLeft.progressProperty());
+        application.getProgressBarBottom().progressProperty().bind(taskBottom.progressProperty());
+        application.getlabelCountLeft().textProperty().bind(taskLeft.messageProperty());
+        application.getlabelCountBottom().textProperty().bind(taskBottom.messageProperty());
+        application.getlabelCountRight().textProperty().bind(taskRight.messageProperty());
+
         tLeft.start();
         tRight.start();
         tBottom.start();
@@ -93,6 +96,24 @@ public class KochManager{
     
     synchronized public void notifyWait(){
         notify();
+    }
+    
+    private void unbindObjects(){
+        application.getProgressBarRight().progressProperty().unbind();
+        application.getProgressBarLeft().progressProperty().unbind();
+        application.getProgressBarBottom().progressProperty().unbind();
+        application.getlabelCountLeft().textProperty().unbind();
+        application.getlabelCountBottom().textProperty().unbind();
+        application.getlabelCountRight().textProperty().unbind();
+    }
+    
+    private void resetObjects(){
+        application.getProgressBarRight().setProgress(0);
+        application.getProgressBarLeft().setProgress(0);
+        application.getProgressBarBottom().setProgress(0);
+        application.getlabelCountLeft().setText("Nr edges: ");
+        application.getlabelCountBottom().setText("Nr edges: ");
+        application.getlabelCountRight().setText("Nr edges: ");
     }
 
 
