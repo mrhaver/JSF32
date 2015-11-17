@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
 
@@ -32,13 +33,22 @@ public class KochManager{
     }
     
     synchronized public void changeLevel(int nxt) {
+        //application.getProgressbarRight().unbind();
+        //application.getProgressbarLeft().unbind();
+        //application.getProgressbarBottom().unbind();
         koch.setLevel(nxt);
         edges.clear();
         TimeStamp tsb = new TimeStamp();
         tsb.setBegin("Begin Berekenen");
-        Thread tRight = new Thread(new GenerateRight(this, application, nxt));
-        Thread tLeft = new Thread(new GenerateLeft(this, application, nxt));
-        Thread tBottom = new Thread(new GenerateBottom(this, application, nxt));
+        Task<Void> taskRight = new GenerateRight(this,application,nxt);
+        Task<Void> taskLeft = new GenerateLeft(this,application,nxt);
+        Task<Void> taskBottom = new GenerateBottom(this,application,nxt);
+        Thread tRight = new Thread(taskRight);
+        Thread tLeft = new Thread(taskLeft);
+        Thread tBottom = new Thread(taskBottom);
+        //application.getProgressBarRight().progressProtperty().bind(taskRight.progressProperty());
+        //application.getProgressBarLeft().progressProtperty().bind(taskLeft.progressProperty());
+        //application.getProgressBarBottom().progressProtperty().bind(taskBottom.progressProperty());
         tLeft.start();
         tRight.start();
         tBottom.start();
