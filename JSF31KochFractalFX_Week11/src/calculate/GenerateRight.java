@@ -7,17 +7,19 @@ package calculate;
 
 import java.util.Observable;
 import java.util.Observer;
+import javafx.concurrent.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 
 /**
  *
  * @author Frank Haver
  */
-public class GenerateRight implements Observer, Runnable{
+public class GenerateRight extends Task<Void> implements Observer{
     
     final private KochFractal koch;
     final private KochManager km;
-    private JSF31KochFractalFX application;
+    final private JSF31KochFractalFX application;
+    private double edges = 0;
     
     public GenerateRight(KochManager km, JSF31KochFractalFX application, int level){
         this.koch = new KochFractal();
@@ -28,7 +30,14 @@ public class GenerateRight implements Observer, Runnable{
     }
     
     @Override
-    synchronized public void run() {
+    public void update(Observable o, Object arg) {
+        edges++;
+        km.voegEdgeToe((Edge)arg);  
+        updateProgress(edges,koch.getNrOfEdges());
+    }
+
+    @Override
+    protected Void call() throws Exception {
         koch.generateRightEdge();
         km.IncreaseCounter();
         if(km.getCounter() == 3){
@@ -36,11 +45,7 @@ public class GenerateRight implements Observer, Runnable{
             km.setCounter(0);
             km.notifyWait();
         }
-    }
-    
-    @Override
-    public void update(Observable o, Object arg) {
-        km.voegEdgeToe((Edge)arg);        
+        return null;
     }
     
 }
