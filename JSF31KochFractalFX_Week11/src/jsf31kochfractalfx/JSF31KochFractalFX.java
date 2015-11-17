@@ -15,6 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ProgressBar;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
@@ -55,6 +56,13 @@ public class JSF31KochFractalFX extends Application {
     private Canvas kochPanel;
     private final int kpWidth = 500;
     private final int kpHeight = 500;
+    
+    private final ProgressBar progressBarLeft = new ProgressBar();
+    private final Label labelCountLeft = new Label();
+    private final ProgressBar progressBarRight = new ProgressBar();
+    private final Label labelCountRight = new Label();
+    private final ProgressBar progressBarBottom = new ProgressBar();
+    private final Label labelCountBottom = new Label();
     
     @Override
     public void start(Stage primaryStage) {
@@ -155,6 +163,34 @@ public class JSF31KochFractalFX extends Application {
             }
         });
         
+        // ProgressBars + Labels
+        Label labelPLeft = new Label();
+        labelPLeft.setText("Progress Left: ");
+        Label labelPBottom = new Label();
+        labelPBottom.setText("Progress Bottom: ");
+        Label labelPRight = new Label();
+        labelPRight.setText("Progress Right: ");
+        grid.add(labelPLeft, 0, 8);
+        grid.add(labelPBottom, 0, 9);
+        grid.add(labelPRight, 0, 10);
+        
+        progressBarLeft.setProgress(0);
+        progressBarBottom.setProgress(0);
+        progressBarRight.setProgress(0);
+        
+        grid.add(progressBarLeft, 5,8);
+        grid.add(progressBarBottom, 5,9);
+        grid.add(progressBarRight, 5,10);
+        
+        labelCountLeft.setText("Nr edges: ");
+        labelCountBottom.setText("Nr edges: ");
+        labelCountRight.setText("Nr edges: ");
+        
+        grid.add(labelCountLeft, 7, 8);
+        grid.add(labelCountBottom, 7, 9);
+        grid.add(labelCountRight, 7, 10);
+        
+        
         // Create Koch manager and set initial level
         resetZoom();
         kochManager = new KochManager(this);
@@ -162,7 +198,7 @@ public class JSF31KochFractalFX extends Application {
         
         // Create the scene and add the grid pane
         Group root = new Group();
-        Scene scene = new Scene(root, kpWidth+50, kpHeight+170);
+        Scene scene = new Scene(root, kpWidth+100, kpHeight+280);
         root.getChildren().add(grid);
         
         // Define title and assign the scene for main window
@@ -293,6 +329,18 @@ public class JSF31KochFractalFX extends Application {
                 e.X2 * zoom + zoomTranslateX,
                 e.Y2 * zoom + zoomTranslateY,
                 e.color);
+    }
+    
+    public ProgressBar getProgressBarRight(){
+        return progressBarRight;
+    }
+    
+    public ProgressBar getProgressBarBottom(){
+        return progressBarBottom;
+    }
+    
+    public ProgressBar getProgressBarLeft(){
+        return progressBarBottom;
     }
 
     /**
