@@ -215,7 +215,7 @@ public class JSF31KochFractalFX extends Application {
         gc.fillRect(0.0,0.0,kpWidth,kpHeight);
     }
     
-    public void drawEdge(Edge e, Boolean white) {
+    synchronized public void drawEdge(Edge e, Boolean white) {
         // Graphics
         GraphicsContext gc = kochPanel.getGraphicsContext2D();
         

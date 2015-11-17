@@ -24,6 +24,9 @@ public class KochManager{
     private KochFractal koch;
     private ArrayList<Edge> edges;
     private int counter = 0;
+    private Task<Void> taskRight;
+    private Task<Void> taskLeft;
+    private Task<Void> taskBottom;
     
     public KochManager(JSF31KochFractalFX application) {
         this.application = application;
@@ -39,9 +42,9 @@ public class KochManager{
         edges.clear();
         TimeStamp tsb = new TimeStamp();
         tsb.setBegin("Begin Berekenen");
-        Task<Void> taskRight = new GenerateRight(this,application,nxt);
-        Task<Void> taskLeft = new GenerateLeft(this,application,nxt);
-        Task<Void> taskBottom = new GenerateBottom(this,application,nxt);
+        taskRight = new GenerateRight(this,application,nxt);
+        taskLeft = new GenerateLeft(this,application,nxt);
+        taskBottom = new GenerateBottom(this,application,nxt);
         Thread tRight = new Thread(taskRight);
         Thread tLeft = new Thread(taskLeft);
         Thread tBottom = new Thread(taskBottom);

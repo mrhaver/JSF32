@@ -7,6 +7,7 @@ package calculate;
 
 import java.util.Observable;
 import java.util.Observer;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 
@@ -30,7 +31,7 @@ public class GenerateBottom extends Task<Void> implements Observer {
     }
     
     @Override
-    public void update(Observable o, Object arg) {
+    public void update(Observable o, final Object arg) {
         edges++;
         km.voegEdgeToe((Edge)arg);
         try {
@@ -38,6 +39,12 @@ public class GenerateBottom extends Task<Void> implements Observer {
         } catch (InterruptedException e) {
 
         }
+        Platform.runLater(new Runnable(){
+            @Override
+            public void run() {
+                application.drawEdge((Edge)arg, true);
+            }           
+        });
         updateProgress(edges,koch.getNrOfEdges() / 3);
         updateMessage("Nr edges: " + String.valueOf(edges));
     }
@@ -49,7 +56,7 @@ public class GenerateBottom extends Task<Void> implements Observer {
         if(km.getCounter() == 3){
             application.requestDrawEdges();
             km.setCounter(0);
-            km.notifyWait();
+            //km.notifyWait();
         }
         return null;
     }
