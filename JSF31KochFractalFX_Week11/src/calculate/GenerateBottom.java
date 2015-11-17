@@ -38,7 +38,6 @@ public class GenerateBottom extends Task<Void> implements Observer {
         } catch (InterruptedException e) {
 
         }
-        System.out.println("Bottom: " + edges + " " + koch.getNrOfEdges() / 3);
         updateProgress(edges,koch.getNrOfEdges() / 3);
         updateMessage("Nr edges: " + String.valueOf(edges));
     }

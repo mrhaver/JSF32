@@ -55,12 +55,6 @@ public class KochManager{
         tLeft.start();
         tRight.start();
         tBottom.start();
-        System.out.println("Effuh Wachtuhh");
-        try {
-            wait();
-        } catch (InterruptedException ex) {
-            Logger.getLogger(KochManager.class.getName()).log(Level.SEVERE, null, ex);
-        }
         System.out.println(String.valueOf(edges.size()));
         tsb.setEnd("Fractal berekend");      
         application.setTextCalc(tsb.toString());
