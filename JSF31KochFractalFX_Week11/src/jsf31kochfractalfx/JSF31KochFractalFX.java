@@ -270,6 +270,7 @@ public class JSF31KochFractalFX extends Application {
             // resetZoom();
             currentLevel++;
             labelLevel.setText("Level: " + currentLevel);
+            clearKochPanel();
             kochManager.changeLevel(currentLevel);
         }
     } 

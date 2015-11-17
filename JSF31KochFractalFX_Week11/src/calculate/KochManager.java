@@ -10,6 +10,7 @@ import java.util.Observable;
 import java.util.Observer;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.application.Platform;
 import javafx.concurrent.Task;
 import jsf31kochfractalfx.JSF31KochFractalFX;
 import timeutil.TimeStamp;
@@ -24,9 +25,13 @@ public class KochManager{
     private KochFractal koch;
     private ArrayList<Edge> edges;
     private int counter = 0;
-    private Task<Void> taskRight;
-    private Task<Void> taskLeft;
-    private Task<Void> taskBottom;
+    private Task<Void> taskRight = null;
+    private Task<Void> taskLeft = null;
+    private Task<Void> taskBottom = null;
+    private Thread tRight = null;
+    private Thread tLeft = null;
+    private Thread tBottom = null;
+    private boolean firsttime = true;
     
     public KochManager(JSF31KochFractalFX application) {
         this.application = application;
@@ -36,6 +41,29 @@ public class KochManager{
     }
     
     synchronized public void changeLevel(int nxt) {
+        if(!firsttime){
+            if(taskRight.isRunning() || taskLeft.isRunning() || taskBottom.isRunning()){
+                koch.cancel();
+                taskRight.cancel();
+                taskLeft.cancel();
+                taskBottom.cancel();
+                tRight.stop();
+                tLeft.stop();
+                tBottom.stop();
+                Platform.runLater(new Runnable(){
+
+                    @Override
+                    public void run() {
+                        application.clearKochPanel();
+                    }
+                    
+                });
+                System.out.println("De tasks zijn nog bezig!");
+            }
+        }
+        else{
+            firsttime = false;
+        }
         unbindObjects();
         resetObjects();
         koch.setLevel(nxt);
@@ -45,23 +73,17 @@ public class KochManager{
         taskRight = new GenerateRight(this,application,nxt);
         taskLeft = new GenerateLeft(this,application,nxt);
         taskBottom = new GenerateBottom(this,application,nxt);
-        Thread tRight = new Thread(taskRight);
-        Thread tLeft = new Thread(taskLeft);
-        Thread tBottom = new Thread(taskBottom);
-        application.getProgressBarRight().progressProperty().bind(taskRight.progressProperty());
-        application.getProgressBarLeft().progressProperty().bind(taskLeft.progressProperty());
-        application.getProgressBarBottom().progressProperty().bind(taskBottom.progressProperty());
-        application.getlabelCountLeft().textProperty().bind(taskLeft.messageProperty());
-        application.getlabelCountBottom().textProperty().bind(taskBottom.messageProperty());
-        application.getlabelCountRight().textProperty().bind(taskRight.messageProperty());
-
+        tRight = new Thread(taskRight);
+        tLeft = new Thread(taskLeft);
+        tBottom = new Thread(taskBottom);
+        bindObjects();
         tLeft.start();
         tRight.start();
         tBottom.start();
-        System.out.println(String.valueOf(edges.size()));
         tsb.setEnd("Fractal berekend");      
         application.setTextCalc(tsb.toString());
         application.setTextNrEdges(String.valueOf(koch.getNrOfEdges()));
+        
     }
     
     public void drawEdges() {
@@ -111,6 +133,15 @@ public class KochManager{
         application.getlabelCountLeft().setText("Nr edges: ");
         application.getlabelCountBottom().setText("Nr edges: ");
         application.getlabelCountRight().setText("Nr edges: ");
+    }
+    
+    private void bindObjects(){
+        application.getProgressBarRight().progressProperty().bind(taskRight.progressProperty());
+        application.getProgressBarLeft().progressProperty().bind(taskLeft.progressProperty());
+        application.getProgressBarBottom().progressProperty().bind(taskBottom.progressProperty());
+        application.getlabelCountLeft().textProperty().bind(taskLeft.messageProperty());
+        application.getlabelCountBottom().textProperty().bind(taskBottom.messageProperty());
+        application.getlabelCountRight().textProperty().bind(taskRight.messageProperty());
     }
 
 
